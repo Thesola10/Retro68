@@ -80,6 +80,19 @@ jobs:
   steps:
   - checkout: self
     submodules: true
+
+  - script: |
+      echo "Hello"
+    displayName: conditional
+    condition: ne(variables['NONEXISTENT_VARIABLE'], '')
+  - script: |
+      echo "variable: $[NONEXISTENT_VARIABLE]"
+      if [ -z "$[NONEXISTENT_VARIABLE]" ]; then
+        echo 'zero'
+        exit
+      fi
+    displayName: if
+
   - script: |
       docker run -i --name nix -v`pwd`:/src nixos/nix:2.3.12 <<EOF
         nix-env -iA cachix -f https://cachix.org/api/v1/install
